@@ -1,0 +1,20 @@
+[project]
+name = "vid2gif-web-api"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "marjon", email = "marjongodito@gmanmi.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "fastapi[standard]>=0.141.1",
+    "ffmpeg-python-helper>=3.1.0",
+]
+
+[project.scripts]
+vid2gif-web-api = "vid2gif_web_api:main"
+
+[build-system]
+requires = ["uv_build>=0.12.9,<0.13.0"]
+build-backend = "uv_build"
