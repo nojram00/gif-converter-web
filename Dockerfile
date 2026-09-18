@@ -4,18 +4,19 @@
 FROM node:22-alpine AS frontend-builder
 
 # Set working directory for frontend
-WORKDIR /app/frontend
+WORKDIR /app
 
 # Copy package.json and package-lock.json
-COPY frontend/package*.json ./
+COPY frontend/package*.json ./frontend/
 
 # Install dependencies
+WORKDIR /app/frontend
 RUN npm ci
 
 # Copy frontend source code
 COPY frontend/ .
 
-# Build the React frontend
+# Build the React frontend (outputs to ../dist as per vite.config.ts)
 RUN npm run build
 
 # Stage 2: Main Python runtime
@@ -27,9 +28,10 @@ RUN apt-get update && apt-get install -y \
     ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
-# Install uv
+# Install uv using the official installer and verify installation
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
-    ln -s /root/.cargo/bin/uv /usr/local/bin/uv
+    /root/.local/bin/uv --version && \
+    ln -s /root/.local/bin/uv /usr/local/bin/uv
 
 # Set working directory
 WORKDIR /app
@@ -37,15 +39,18 @@ WORKDIR /app
 # Copy pyproject.toml and uv.lock for dependency installation
 COPY pyproject.toml uv.lock ./
 
-# Install Python dependencies using uv without virtual environment
-RUN uv pip install --system -e .
+# Copy README.md file (required by pyproject.toml)
+COPY README.md ./
 
-# Copy Python source code
+# Copy Python source code FIRST
 COPY src/ ./src/
 COPY main.py .
 
+# Install Python dependencies using uv without virtual environment
+RUN uv pip install --system -e .
+
 # Copy built frontend from the first stage
-COPY --from=frontend-builder /app/frontend/dist ./dist/
+COPY --from=frontend-builder /app/dist ./dist/
 
 # Expose port for the FastAPI application
 EXPOSE 8000

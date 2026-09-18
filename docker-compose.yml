@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  vid2gif-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vid2gif-web
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount source code for development (optional)
+      - ./src:/app/src
+      - ./main.py:/app/main.py
+      - ./pyproject.toml:/app/pyproject.toml
+      - ./uv.lock:/app/uv.lock
+      - ./README.md:/app/README.md
+      # Mount frontend for development (optional)
+      - ./frontend:/app/frontend
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PYTHONPATH=/app
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/test"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
