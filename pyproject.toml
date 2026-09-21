@@ -9,7 +9,7 @@ authors = [
 requires-python = ">=3.14"
 dependencies = [
     "fastapi[standard]>=0.141.1",
-    "ffmpeg-python-helper>=3.2.0",
+    "ffmpeg-python-helper>=4.0.0",
 ]
 
 [project.scripts]

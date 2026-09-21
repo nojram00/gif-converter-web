@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Request, Response
 from fastapi.responses import JSONResponse
-from ffmpeg_python_helper import FFMPEG, FFProbe
+from ffmpeg_python_helper import AsyncFFMPEG, FFMPEG
+from fastapi.concurrency import run_in_threadpool
 
 from vid2gif_web_api.helpers.byte_helper import ByteSizeHelper
 
@@ -8,21 +9,21 @@ router = APIRouter()
 
 @router.post('/gif')
 async def gif(request : Request):
+    import platform
     header  = request.headers
     data : bytes = await request.body()
 
-    print(type(data).__name__)
+    content_type = header.get("Content-Type", "").split(";")[0].strip().lower()
 
     try:
-        if header.get('Content-Type') != 'video/mp4':
+        if content_type != 'video/mp4':
             return JSONResponse(
                 content={
                     "message": "Content-Type must be video/mp4."
                 },
                 status_code=401
             )
-
-        if type(data).__name__ == 'bytes':
+        if isinstance(data, bytes):
 
             size_helper = ByteSizeHelper(data)
 
@@ -34,13 +35,20 @@ async def gif(request : Request):
                     status_code=400
                 )
 
-            output = FFMPEG.api().gifs(data)
+            if platform.system().lower() == 'windows' :
+                output = await run_in_threadpool(
+                    FFMPEG.api().gifs,
+                    data
+                )
+            else:
+                output = await AsyncFFMPEG.api().gifs(data)
 
             return Response(
                 content=output,
                 media_type="image/gif"
             )
-    except RuntimeError:
+    except RuntimeError as e:
+        print(f"Error: {e}")
         return JSONResponse(
             content={
                 "message": "Invalid or Corrupted File. Please generate a valid file"

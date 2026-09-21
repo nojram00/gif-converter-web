@@ -244,11 +244,11 @@ wheels = [
 
 [[package]]
 name = "ffmpeg-python-helper"
-version = "3.2.0"
+version = "4.0.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/b2/70/57e3fcc6f62b207fa4644a5dcbca40251f5ea38a143abf365f11f738f0e6/ffmpeg_python_helper-3.2.0.tar.gz", hash = "sha256:08547a9e2c135f84ca9fcd8d3316416101bda5faec089ebbd54aff83bdff9ce1", size = 11271, upload-time = "2026-09-21T03:41:52.916Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/e3/c4/3da48cd33581cf199030cd94f259d66b0cf4801ed689d4eb57be616c8991/ffmpeg_python_helper-4.0.0.tar.gz", hash = "sha256:d8c2dbdec4584d5f950c61b55178ee6db631fa0ad50fab26a4e28974b86427a2", size = 13895, upload-time = "2026-09-21T06:39:13.98Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a0/0c/382a92ac01c596fe906684d8fd6b4d6099d5f4bcdbebf650abee2959cdb0/ffmpeg_python_helper-3.2.0-py3-none-any.whl", hash = "sha256:852b9c057cdf75e9f009691e40bd8ebf64d12dacc77c881475780a73679ec3cf", size = 14786, upload-time = "2026-09-21T03:41:51.486Z" },
+    { url = "https://files.pythonhosted.org/packages/e4/6a/b1b1eb30ff1387118094f593e0ab99176cd3a3a16754e258f3f313cce178/ffmpeg_python_helper-4.0.0-py3-none-any.whl", hash = "sha256:5d24189a94faf997c96caee2727ecc48fc63d23ca4df26ce0f53e447c3f4847e", size = 20740, upload-time = "2026-09-21T06:39:12.134Z" },
 ]
 
 [[package]]
@@ -756,7 +756,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "fastapi", extras = ["standard"], specifier = ">=0.141.1" },
-    { name = "ffmpeg-python-helper", specifier = ">=3.2.0" },
+    { name = "ffmpeg-python-helper", specifier = ">=4.0.0" },
 ]
 
 [[package]]
