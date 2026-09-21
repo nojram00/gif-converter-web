@@ -6,6 +6,7 @@ export default function useGifApi() {
 
     const send = async (video_byte : Blob) => {
         try {
+            setError(null);
             const response = await fetch("/gif", {
                 method: 'POST',
                 body: video_byte,
@@ -14,12 +15,20 @@ export default function useGifApi() {
                 }
             })
 
-            const data = await response.blob();
+            if (response.status !== 200) {
+                const json_data = await response.json();
+                setError(json_data?.message ?? "Something Went Wrong.");
+                setByte(null);
+                return;
+            }
+
+            const data = await response.blob(); 
             if (data) {
                 setByte(data);
             }
         } catch (error : any) {
             setError(error?.message);
+            setByte(null);
         }
     }
 

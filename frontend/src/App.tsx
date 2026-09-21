@@ -1,10 +1,16 @@
-import { useState, type ChangeEvent } from 'react';
+import { useEffect, useState, type ChangeEvent } from 'react';
 import useGifApi from './hooks/useGifApi'
 
 function App() {
-  const { byte, send } = useGifApi();
+  const { byte, send, error } = useGifApi();
   const [data, setData] = useState<File | null>(null)
   const [isConverting, setIsConverting] = useState(false)
+
+  useEffect(() => {
+    if (error) {
+      alert(error)
+    }
+  }, [error])
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
